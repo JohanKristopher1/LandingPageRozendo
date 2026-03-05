@@ -1,0 +1,17 @@
+{
+  "name": "landing-page-rozendo",
+  "private": true,
+  "scripts": {
+    "dev": "cd Legal-Site-Builder && npm run dev:client",
+    "dev:full": "cd Legal-Site-Builder && npm run dev",
+    "build": "cd Legal-Site-Builder && npm run build"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.34.3",
+    "lucide-react": "^0.575.0",
+    "tailwind-merge": "^3.5.0",
+    "wouter": "^3.9.0"
+  }
+}
