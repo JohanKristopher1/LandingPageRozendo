@@ -1,0 +1,62 @@
+Esta é uma descrição detalhada da landing page para um escritório de advocacia (Rozendo Advocacia), estruturada como um prompt de design para reprodução ou referência.
+
+A página utiliza uma paleta de cores Premium (Dark Mode), focada em tons de preto, cinza escuro e detalhes em dourado/bege para transmitir autoridade e sofisticação.
+
+1. Header (Cabeçalho)
+Logotipo: Posicionado à esquerda ou centralizado, com o nome "Rozendo" em tipografia elegante.
+
+Menu de Navegação: Links para "Casos Frequentes", "Serviços", "Sobre", "Avaliações".
+
+CTA Secundário: Botão "Fale Conosco" com bordas finas (outline) no canto superior direito.
+
+2. Hero Section (Seção Principal)
+Fundo: Imagem de uma biblioteca jurídica clássica com baixa opacidade/overlay escuro.
+
+Lado Esquerdo: Foto de um advogado profissional em traje formal, com braços cruzados. Abaixo da foto, um badge flutuante com "ADVOGADO ONLINE" e um indicador de status.
+
+Lado Direito (Texto): * Headline: "Seu direito e a sua tranquilidade jurídica é a nossa Missão" (Destaque em branco).
+
+Subheadline: "Fale com um dos nossos advogados".
+
+Botão CTA Principal: "Entrar em Contato" (Botão sólido, preto com bordas sutis).
+
+3. Casos Frequentes (Carrossel/Cards)
+Título: "CASOS FREQUENTES DO ESCRITÓRIO" em dourado.
+
+Estrutura: Um slider horizontal com três cards visíveis.
+
+Conteúdo dos Cards: Imagens conceituais (ex: aeroportos, documentos) com sobreposição de texto sobre problemas específicos como "Indenizações por Voo" e "Inscrição Indevida". Cada card possui um botão "Mais Informações".
+
+4. Nossa Área de Atuação (Grid de Serviços)
+Fundo: Branco (contraste com o resto da página).
+
+Layout: Grid 3x2 (6 categorias).
+
+Categorias: * Direito Civil, Família, Trabalhista, Previdenciário, Imobiliário e Sucessório.
+
+Estilo Visual: Cada serviço tem uma foto retangular com cantos arredondados, um título em negrito e um breve texto descritivo sobre o suporte oferecido.
+
+Botão Final: "Peça mais informações" centralizado abaixo do grid.
+
+5. Sobre o Escritório (Institucional)
+Layout: Dividido em duas colunas (Split Section).
+
+Lado Esquerdo (Texto): Título "CONHEÇA NOSSO ESCRITÓRIO" seguido de 2 a 3 parágrafos de texto institucional descrevendo a experiência e valores da banca. Botão "Fale Conosco" ao final.
+
+Lado Direito (Imagem): Foto de perfil do advogado principal em plano médio, harmonizando com a Hero Section.
+
+6. Prova Social (Avaliações Google)
+Destaque: Selo "EXCELENTE" com 5 estrelas e o logo do Google.
+
+Cards de Depoimento: Layout horizontal com a foto do cliente, nome, data da avaliação, ícones de 5 estrelas e o texto do depoimento (ex: "Profissionais excelentes, super indico").
+
+Badge: Botão "Verificações Realizadas" no canto inferior direito da seção.
+
+7. Rodapé (Contato e Localização)
+Informações de Contato (Esquerda): Logotipo, ícones de telefone/WhatsApp, Instagram (@rozendo), E-mail e Endereço físico.
+
+Mapa (Direita): Widget integrado do Google Maps mostrando a localização do escritório.
+
+Copyright: Rodapé final com "Política de Privacidade", "Termos de Uso" e direitos reservados.
+
+Dica de Design: A tipografia alterna entre uma fonte Serifada elegante para títulos (passando seriedade) e uma Sans-Serif moderna para textos de leitura (garantindo legibilidade).
