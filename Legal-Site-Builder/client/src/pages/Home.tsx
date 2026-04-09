@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 
 // Image imports
 import heroBg from "@/assets/images/bg-advogado.png";
-import lawyerImg from "@/assets/images/lawyer.jpg";
+import lawyerImg from "@/assets/images/Rozendo.jpeg";
 import caseFlight from "@/assets/images/case-flight.jpg";
 import caseDoc from "@/assets/images/case-document.jpg";
 import practiceCivil from "@/assets/images/practice-civil.jpg";
@@ -22,10 +22,72 @@ import practiceFamily from "@/assets/images/practice-family.jpg";
 import practiceLabor from "@/assets/images/practice-labor.jpg";
 import practiceRealEstate from "@/assets/images/practice-realestate.jpg";
 import practiceSocial from "@/assets/images/practice-social.jpg";
-import practiceSuccession from "@/assets/images/practice-succession.jpg";
 import avatar1 from "@/assets/images/avatar-1.jpg";
 import avatar2 from "@/assets/images/avatar-2.jpg";
-import logoImg from "@assets/Captura_de_tela_2026-02-24_161817_1771964324084.png";
+
+const practiceCriminalImg =
+  "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=1200";
+const practiceBusinessImg =
+  "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200";
+
+const practiceAreas = [
+  {
+    title: "Direito do consumidor",
+    desc: "Defesa em relações de consumo, vícios, cobranças indevidas e práticas abusivas.",
+    img: caseDoc,
+    detail:
+      "O Código de Defesa do Consumidor (CDC) garante equilíbrio entre consumidores e fornecedores. Atuamos na análise de contratos de adesão, rescisão de serviços, negativação indevida, propaganda enganosa, produtos com vício e cobranças abusivas. Buscamos reparação por danos materiais e morais e acompanhamento em órgãos de defesa do consumidor e no Judiciário, priorizando soluções ágeis e a recuperação dos seus direitos.",
+  },
+  {
+    title: "Direito Trabalhista",
+    desc: "Rescisões, horas extras, assédio moral, vínculos e negociações com empregadores.",
+    img: practiceLabor,
+    detail:
+      "O Direito do Trabalho assegura dignidade na relação empregado–empregador. Prestamos consultoria e representação em rescisões contratuais, verbas rescisórias, horas extras não pagas, adicional de insalubridade ou periculosidade, assédio moral e sexual, reconhecimento de vínculo empregatício e acordos trabalhistas. Nosso objetivo é garantir o cumprimento da CLT e normas coletivas, com estratégia adequada a cada fase do conflito.",
+  },
+  {
+    title: "Direito Familiar",
+    desc: "Divórcio, pensão, guarda, união estável e mediação em conflitos familiares.",
+    img: practiceFamily,
+    detail:
+      "As questões familiares exigem técnica e sensibilidade guiadas pelo melhor interesse da família e das crianças. Atuamos em divórcios consensuais ou litigiosos, pensão alimentícia, regulamentação de guarda e convivência, investigação de paternidade, união estável e mediação familiar. Buscamos acordos estáveis sempre que possível e, quando necessário, defesa firme em juízo para proteger vínculos, patrimônio e o bem-estar de todos os envolvidos.",
+  },
+  {
+    title: "Direito Civil",
+    desc: "Contratos, indenizações, responsabilidade civil e relações patrimoniais entre particulares.",
+    img: practiceCivil,
+    detail:
+      "O Direito Civil regula as relações mais fundamentais da nossa vida, e ter um suporte jurídico estratégico é indispensável para proteger seu patrimônio e sua dignidade. Nossa atuação abrange desde a elaboração e análise minuciosa de contratos, garantindo segurança jurídica em todos os seus negócios, até a defesa rigorosa em casos de responsabilidade civil. Atuamos de forma incisiva no contencioso cível para buscar indenizações e reparações justas por danos materiais e morais, assegurando que abusos e prejuízos não fiquem impunes. Seja na prevenção de conflitos ou na representação judicial, nosso compromisso é oferecer soluções jurídicas precisas para que você tenha a tranquilidade de saber que seus direitos estão em boas mãos.",
+  },
+  {
+    title: "Direito Criminal",
+    desc: "Defesa em inquéritos e processos penais, liberdade e garantias do acusado.",
+    img: practiceCriminalImg,
+    detail:
+      "A defesa criminal exige rapidez, estratégia e profundo respeito às garantias constitucionais. Prestamos assistência em inquéritos policiais, audiências de custódia, habeas corpus, defesas e recursos em processos penais. Trabalhamos para evitar constrangimentos ilegais, assegurar o contraditório e a ampla defesa e buscar soluções que preservem liberdade, honra e patrimônio, sempre em conformidade com o ordenamento penal e processual penal.",
+  },
+  {
+    title: "Direito empresarial",
+    desc: "Sociedades, contratos comerciais, compliance e suporte jurídico ao negócio.",
+    img: practiceBusinessImg,
+    detail:
+      "O Direito Empresarial sustenta a governança e o crescimento seguro das empresas. Oferecemos assessoria na constituição e reorganização societária, elaboração e revisão de contratos comerciais, pareceres de risco, acordos com parceiros e fornecedores e orientação em litígios empresariais. Integramos visão jurídica à estratégia do negócio para reduzir passivos, cumprir obrigações regulatórias e proteger sócios e investidores.",
+  },
+  {
+    title: "Direito Condominial",
+    desc: "Assembleias, taxas, conflitos entre moradores e convenção do condomínio.",
+    img: practiceRealEstate,
+    detail:
+      "O condomínio envolve direitos e deveres coletivos que precisam estar alinhados à Lei e à convenção. Atuamos em interpretação de convenções e regimentos internos, cobrança e contestação de taxas condominiais, assembleias, conflitos entre moradores, obras irregulares e responsabilidade do síndico. Buscamos soluções que preservem a convivência e o patrimônio comum, seja por mediação ou pela defesa do condomínio ou do condômino em juízo.",
+  },
+  {
+    title: "Direito Previdenciário",
+    desc: "Aposentadorias, benefícios do INSS, revisões e planejamento previdenciário.",
+    img: practiceSocial,
+    detail:
+      "O Direito Previdenciário assegura o acesso justo aos benefícios da Previdência Social. Acompanhamos requerimentos administrativos no INSS, recursos e ações judiciais para aposentadorias (por idade, tempo de contribuição, especial etc.), auxílio-doença, BPC/LOAS, pensão por morte e revisões de benefícios. Também orientamos no planejamento previdenciário para antecipar requisitos e aumentar a segurança da sua renda futura.",
+  },
+] as const;
 
 export default function Home() {
   return (
@@ -192,91 +254,32 @@ export default function Home() {
             <h3 className="text-3xl md:text-4xl font-serif text-black">NOSSA ÁREA DE ATUAÇÃO</h3>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {[
-              { title: "Direito Civil", desc: "Indenizações, danos morais, contratos, responsabilidade civil e contencioso.", img: practiceCivil },
-              { title: "Direito de Família", desc: "Divórcios, pensão alimentícia, guarda, inventários e planejamento sucessório.", img: practiceFamily },
-              { title: "Direito Trabalhista", desc: "Defesa dos direitos do trabalhador, horas extras, rescisões e assédio moral.", img: practiceLabor },
-              { title: "Direito Previdenciário", desc: "Aposentadorias, BPC/LOAS, auxílio-doença e planejamento previdenciário.", img: practiceSocial },
-              { title: "Direito Imobiliário", desc: "Compra e venda, locações, usucapião, regularização de imóveis.", img: practiceRealEstate },
-              { title: "Direito Sucessório", desc: "Inventários judiciais e extrajudiciais, testamentos e doações.", img: practiceSuccession },
-            ].map((practice, index) => {
-              if (practice.title === "Direito Civil") {
-                return (
-                  <Dialog key={index}>
-                    <DialogTrigger asChild>
-                      <div className="group cursor-pointer">
-                        <div className="overflow-hidden rounded-2xl mb-6 bg-zinc-100 aspect-[4/3]">
-                          <img
-                            src={practice.img}
-                            alt={practice.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                          />
-                        </div>
-                        <h4 className="text-xl font-bold mb-3 text-black font-serif">{practice.title}</h4>
-                        <p className="text-zinc-600 text-sm leading-relaxed">{practice.desc}</p>
-                      </div>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
-                      <DialogHeader>
-                        <DialogTitle>Direito Civil</DialogTitle>
-                        <DialogDescription asChild>
-                          <p className="text-sm leading-relaxed text-muted-foreground">
-                            O Direito Civil regula as relações mais fundamentais da nossa vida, e ter um suporte jurídico estratégico é indispensável
-                            para proteger seu patrimônio e sua dignidade. Nossa atuação abrange desde a elaboração e análise minuciosa de contratos,
-                            garantindo segurança jurídica em todos os seus negócios, até a defesa rigorosa em casos de responsabilidade civil. Atuamos
-                            de forma incisiva no contencioso cível para buscar indenizações e reparações justas por danos materiais e morais,
-                            assegurando que abusos e prejuízos não fiquem impunes. Seja na prevenção de conflitos ou na representação judicial,
-                            nosso compromisso é oferecer soluções jurídicas precisas para que você tenha a tranquilidade de saber que seus direitos
-                            estão em boas mãos.
-                          </p>
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
-                );
-              }
-
-              if (practice.title === "Direito de Família") {
-                return (
-                  <div key={index} className="group cursor-pointer">
-                    <div className="relative overflow-hidden rounded-2xl mb-6 bg-zinc-100 aspect-[4/3]">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {practiceAreas.map((practice, index) => (
+              <Dialog key={`${practice.title}-${index}`}>
+                <DialogTrigger asChild>
+                  <div className="group cursor-pointer text-left">
+                    <div className="overflow-hidden rounded-2xl mb-6 bg-zinc-100 aspect-[4/3]">
                       <img
                         src={practice.img}
                         alt={practice.title}
-                        className="w-full h-full object-cover transition-all duration-700 group-hover:blur-sm group-hover:scale-105"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
-                      <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center p-4">
-                        <p className="text-xs md:text-sm text-white leading-relaxed max-h-full overflow-y-auto">
-                          O Direito de Família exige uma abordagem que une sensibilidade e rigor técnico para proteger o que é mais valioso: suas
-                          relações e seu patrimônio. Atuamos de forma estratégica e humanizada em processos de divórcio, seja judicial ou
-                          extrajudicial, buscando sempre a melhor solução para a transição familiar. Nossa expertise abrange a definição de pensão
-                          alimentícia e o estabelecimento de regimes de guarda que priorizem o bem-estar dos filhos, além da condução ágil de
-                          inventários para a transmissão de bens. Também oferecemos consultoria especializada em planejamento sucessório,
-                          antecipando soluções para evitar conflitos futuros e garantir a preservação do legado familiar com segurança jurídica.
-                        </p>
-                      </div>
                     </div>
                     <h4 className="text-xl font-bold mb-3 text-black font-serif">{practice.title}</h4>
                     <p className="text-zinc-600 text-sm leading-relaxed">{practice.desc}</p>
                   </div>
-                );
-              }
-
-              return (
-                <div key={index} className="group cursor-pointer">
-                  <div className="overflow-hidden rounded-2xl mb-6 bg-zinc-100 aspect-[4/3]">
-                    <img
-                      src={practice.img}
-                      alt={practice.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                  <h4 className="text-xl font-bold mb-3 text-black font-serif">{practice.title}</h4>
-                  <p className="text-zinc-600 text-sm leading-relaxed">{practice.desc}</p>
-                </div>
-              );
-            })}
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>{practice.title}</DialogTitle>
+                    <DialogDescription asChild>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{practice.detail}</p>
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            ))}
           </div>
 
           <div className="text-center">
@@ -451,7 +454,7 @@ export default function Home() {
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5">
                     <Phone className="w-4 h-4" />
                   </div>
-                  <span>(11) 99999-9999</span>
+                  <span>(92) 9 8529-0505</span>
                 </li>
                 <li className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5">
@@ -463,25 +466,25 @@ export default function Home() {
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5">
                     <Mail className="w-4 h-4" />
                   </div>
-                  <span>contato@rozendo.adv.br</span>
+                  <span>joaorozendo.adv@gmail.com</span>
                 </li>
                 <li className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5">
                     <MapPin className="w-4 h-4" />
                   </div>
-                  <span>Av. Paulista, 1000 - São Paulo, SP</span>
+                  <span>Rua André Araújo, 97, edifício fórum business, bairro Adrianópolis</span>
                 </li>
               </ul>
             </div>
 
-            <div className="bg-white/5 p-2 rounded-xl border border-white/10 h-[250px] overflow-hidden">
-              <img 
-                src="https://maps.googleapis.com/maps/api/staticmap?center=Av.+Paulista,1000,Sao+Paulo&zoom=15&size=600x300&maptype=roadmap&markers=color:black%7CAv.+Paulista,1000,Sao+Paulo&key=YOUR_API_KEY" 
-                alt="Mapa Localização" 
-                className="w-full h-full object-cover rounded-lg filter grayscale opacity-70"
-                onError={(e) => {
-                  e.currentTarget.src = "https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=600&h=300";
-                }}
+            <div className="relative bg-white/5 p-2 rounded-xl border border-white/10 min-h-[240px] h-[280px] md:h-[300px] overflow-hidden">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.9525611711492!2d-60.00974619999999!3d-3.1072515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x926c052db993bf1f%3A0x19fb39ba9fe7a612!2sF%C3%B3rum%20Business%20Center%20Manaus!5e0!3m2!1sen!2sbr!4v1775772195850!5m2!1sen!2sbr"
+                title="Fórum Business Center Manaus — localização do escritório"
+                className="absolute inset-0 h-full w-full rounded-lg border-0"
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
           </div>
