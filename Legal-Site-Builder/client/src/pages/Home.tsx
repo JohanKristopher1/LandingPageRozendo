@@ -33,8 +33,8 @@ const practiceCriminalImg =
 const practiceBusinessImg =
   "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200";
 
-const headerWhatsAppHref = "https://wa.me/5592985290505";
-const headerInstagramHref = "https://www.instagram.com/rozendo.advocacia/";
+const headerWhatsAppHref = "http://wa.me/5592985290505";
+const headerInstagramHref = "https://www.instagram.com/rozendoadvogadoseassociados?igsh=MWtreTQ5ZGY4M25jZw==";
 const headerMailto = "mailto:joaorozendo.adv@gmail.com";
 
 const practiceAreas = [
@@ -229,11 +229,14 @@ export default function Home() {
             
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
+                asChild
                 variant="granite"
                 className="h-14 px-10 rounded-md border-none uppercase tracking-widest font-semibold text-sm group hover:shadow-xl hover:shadow-amber-500/40 transition-shadow"
               >
-                Entrar em Contato
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <a href={headerWhatsAppHref} target="_blank" rel="noopener noreferrer">
+                  Entrar em Contato
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </a>
               </Button>
             </div>
           </motion.div>
@@ -325,8 +328,10 @@ export default function Home() {
           </div>
 
           <div className="text-center">
-            <Button variant="granite" className="h-14 px-10 rounded-none uppercase tracking-widest font-semibold text-sm">
-              Peça mais informações
+            <Button asChild variant="granite" className="h-14 px-10 rounded-none uppercase tracking-widest font-semibold text-sm">
+              <a href={headerWhatsAppHref} target="_blank" rel="noopener noreferrer">
+                Peça mais informações
+              </a>
             </Button>
           </div>
         </div>
@@ -370,8 +375,10 @@ export default function Home() {
                 </ul>
               </div>
 
-              <Button variant="outline" className="border-primary text-primary hover:bg-primary/10 rounded-none uppercase tracking-widest text-xs h-12 px-8 mt-4">
-                Fale Conosco
+              <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary/10 rounded-none uppercase tracking-widest text-xs h-12 px-8 mt-4">
+                <a href={headerWhatsAppHref} target="_blank" rel="noopener noreferrer">
+                  Fale Conosco
+                </a>
               </Button>
             </div>
 
@@ -400,7 +407,7 @@ export default function Home() {
             <div className="mx-auto max-w-4xl rounded-3xl bg-[#050814] border border-black/70 shadow-[0_18px_60px_rgba(0,0,0,0.7)] px-6 py-6 md:px-10 md:py-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
               <div className="flex-1">
                 <p className="text-3xl md:text-4xl font-serif text-primary font-semibold leading-none">
-                  +15 <span className="text-lg md:text-xl align-top">MIL</span>
+                  +2 <span className="text-lg md:text-xl align-top">MIL</span>
                 </p>
                 <p className="mt-2 text-xs md:text-sm text-white/70 uppercase tracking-[0.25em]">
                   Clientes atendidos
@@ -411,7 +418,7 @@ export default function Home() {
 
               <div className="flex-1">
                 <p className="text-3xl md:text-4xl font-serif text-primary font-semibold leading-none">
-                  +25 <span className="text-lg md:text-xl align-top">ANOS</span>
+                  +9 <span className="text-lg md:text-xl align-top">ANOS</span>
                 </p>
                 <p className="mt-2 text-xs md:text-sm text-white/70 uppercase tracking-[0.25em]">
                   de experiência
@@ -422,7 +429,7 @@ export default function Home() {
 
               <div className="flex-1">
                 <p className="text-3xl md:text-4xl font-serif text-primary font-semibold leading-none">
-                  +5 <span className="text-lg md:text-xl align-top">MIL</span>
+                  +1 <span className="text-lg md:text-xl align-top">MIL</span>
                 </p>
                 <p className="mt-2 text-xs md:text-sm text-white/70 uppercase tracking-[0.25em]">
                   Casos defendidos
