@@ -11,19 +11,22 @@ import {
 } from "@/components/ui/dialog";
 import { MapPin, Phone, Mail, Instagram, Star, ArrowRight, ShieldCheck, Scale, CheckCircle2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Image imports
 import heroBg from "@/assets/images/bg-advogado.png";
 import lawyerImg from "@/assets/images/Rozendo.jpeg";
 import caseFlight from "@/assets/images/case-flight.jpg";
 import caseDoc from "@/assets/images/case-document.jpg";
+import financiamentoVeiculoImg from "@/assets/images/finaciamento-de-veiculo.jpg";
+import taxasAbusivasImg from "@/assets/images/taxas-abusivas.jpg";
+import atrasoEntregaImg from "@/assets/images/atraso-na-entrega.jpg";
 import practiceCivil from "@/assets/images/practice-civil.jpg";
 import practiceFamily from "@/assets/images/practice-family.jpg";
 import practiceLabor from "@/assets/images/practice-labor.jpg";
 import practiceRealEstate from "@/assets/images/practice-realestate.jpg";
 import practiceSocial from "@/assets/images/practice-social.jpg";
-import avatar1 from "@/assets/images/avatar-1.jpg";
-import avatar2 from "@/assets/images/avatar-2.jpg";
 import logoMarcaDagua from "@/assets/images/Logo-marca-d-agua.png";
 import logoHeader from "@/assets/images/logo-header.png";
 import fundoLivros from "@/assets/images/fundo-livros.png";
@@ -37,66 +40,115 @@ const headerWhatsAppHref = "http://wa.me/5592985290505";
 const headerInstagramHref = "https://www.instagram.com/rozendoadvogadoseassociados?igsh=MWtreTQ5ZGY4M25jZw==";
 const headerMailto = "mailto:joaorozendo.adv@gmail.com";
 
+const googleMapsPlaceReviewsUrl =
+  "https://www.google.com/maps/place/Rozendo+Advogados+%26+Associados/@-3.1072668,-60.009624,17z/data=!3m1!4b1!4m6!3m5!1s0x926c05cf6c8c3389:0xdfeed824546a005!8m2!3d-3.1072668!4d-60.009624!16s%2Fg%2F11xccft_qs?hl=pt_BR";
+
+type GoogleReviewsApiResponse = {
+  placeName: string | null;
+  rating: number | null;
+  userRatingsTotal: number | null;
+  reviews: {
+    authorName: string;
+    rating: number;
+    relativeTime: string;
+    text: string;
+    profilePhotoUrl: string | null;
+  }[];
+  error: string | null;
+};
+
 const practiceAreas = [
   {
     title: "Direito do consumidor",
     desc: "Defesa em relações de consumo, vícios, cobranças indevidas e práticas abusivas.",
     img: caseDoc,
     detail:
-      "O Código de Defesa do Consumidor (CDC) garante equilíbrio entre consumidores e fornecedores. Atuamos na análise de contratos de adesão, rescisão de serviços, negativação indevida, propaganda enganosa, produtos com vício e cobranças abusivas. Buscamos reparação por danos materiais e morais e acompanhamento em órgãos de defesa do consumidor e no Judiciário, priorizando soluções ágeis e a recuperação dos seus direitos.",
+      "O Direito do Consumidor é o ramo do direito que protege as pessoas nas relações de consumo, garantindo equilíbrio entre consumidores e empresas. No Brasil, essas normas estão previstas no Código de Defesa do Consumidor (CDC), que assegura transparência, segurança e respeito nas contratações.\n\nEntre os principais direitos estão: acesso à informação clara sobre produtos e serviços, proteção contra práticas abusivas, garantia de qualidade e possibilidade de reparação em caso de prejuízos.\n\nNa prática, isso significa que o consumidor pode, por exemplo, exigir a troca ou reembolso de um produto com defeito, contestar cobranças indevidas, solicitar a remoção de negativação injusta e desistir de compras online no prazo de até 7 dias.\n\nPara facilitar o entendimento, veja alguns exemplos práticos:\n\nSe um produto apresenta defeito após a compra, o consumidor pode exigir o conserto, a troca ou até o reembolso do valor pago.\nCaso uma pessoa tenha seu nome negativado indevidamente, ela pode solicitar a retirada imediata e,",
   },
   {
     title: "Direito Trabalhista",
     desc: "Rescisões, horas extras, assédio moral, vínculos e negociações com empregadores.",
     img: practiceLabor,
     detail:
-      "O Direito do Trabalho assegura dignidade na relação empregado–empregador. Prestamos consultoria e representação em rescisões contratuais, verbas rescisórias, horas extras não pagas, adicional de insalubridade ou periculosidade, assédio moral e sexual, reconhecimento de vínculo empregatício e acordos trabalhistas. Nosso objetivo é garantir o cumprimento da CLT e normas coletivas, com estratégia adequada a cada fase do conflito.",
+      "O Direito Trabalhista é o ramo do direito que regula as relações entre empregados e empregadores, garantindo condições dignas de trabalho e o cumprimento dos direitos previstos em lei. No Brasil, essas normas estão previstas principalmente na Consolidação das Leis do Trabalho (CLT).\n\nEntre os principais direitos estão: registro em carteira, pagamento de salário justo, férias, 13º salário, FGTS, jornada de trabalho adequada e segurança no ambiente de trabalho.\n\nNa prática, isso significa que o trabalhador pode, por exemplo, cobrar verbas rescisórias não pagas, horas extras, reconhecimento de vínculo empregatício e indenização em casos de demissão irregular ou condições inadequadas de trabalho.",
   },
   {
     title: "Direito Familiar",
     desc: "Divórcio, pensão, guarda, união estável e mediação em conflitos familiares.",
     img: practiceFamily,
     detail:
-      "As questões familiares exigem técnica e sensibilidade guiadas pelo melhor interesse da família e das crianças. Atuamos em divórcios consensuais ou litigiosos, pensão alimentícia, regulamentação de guarda e convivência, investigação de paternidade, união estável e mediação familiar. Buscamos acordos estáveis sempre que possível e, quando necessário, defesa firme em juízo para proteger vínculos, patrimônio e o bem-estar de todos os envolvidos.",
+      "O Direito de Família é o ramo do direito que trata das relações familiares, envolvendo questões como casamento, divórcio, guarda de filhos, pensão alimentícia e herança.\n\nEntre os principais direitos estão: regulamentação da guarda e convivência dos filhos, pagamento de pensão alimentícia, divisão de bens e proteção dos direitos de todos os membros da família.\n\nNa prática, isso significa que uma pessoa pode, por exemplo, solicitar o divórcio, definir a guarda dos filhos, pedir pensão alimentícia ou regularizar a partilha de bens.",
   },
   {
     title: "Direito Civil",
     desc: "Contratos, indenizações, responsabilidade civil e relações patrimoniais entre particulares.",
     img: practiceCivil,
     detail:
-      "O Direito Civil regula as relações mais fundamentais da nossa vida, e ter um suporte jurídico estratégico é indispensável para proteger seu patrimônio e sua dignidade. Nossa atuação abrange desde a elaboração e análise minuciosa de contratos, garantindo segurança jurídica em todos os seus negócios, até a defesa rigorosa em casos de responsabilidade civil. Atuamos de forma incisiva no contencioso cível para buscar indenizações e reparações justas por danos materiais e morais, assegurando que abusos e prejuízos não fiquem impunes. Seja na prevenção de conflitos ou na representação judicial, nosso compromisso é oferecer soluções jurídicas precisas para que você tenha a tranquilidade de saber que seus direitos estão em boas mãos.",
+      "O Direito Civil é o ramo do direito que regula as relações entre pessoas, envolvendo direitos e deveres no âmbito pessoal e patrimonial.\n\nEntre os principais pontos estão: contratos, responsabilidade civil, indenizações, posse e propriedade de bens.\n\nNa prática, isso significa que uma pessoa pode, por exemplo, cobrar o cumprimento de um contrato, buscar indenização por danos morais ou materiais e resolver conflitos relacionados a bens e obrigações.",
   },
   {
     title: "Direito Criminal",
     desc: "Defesa em inquéritos e processos penais, liberdade e garantias do acusado.",
     img: practiceCriminalImg,
     detail:
-      "A defesa criminal exige rapidez, estratégia e profundo respeito às garantias constitucionais. Prestamos assistência em inquéritos policiais, audiências de custódia, habeas corpus, defesas e recursos em processos penais. Trabalhamos para evitar constrangimentos ilegais, assegurar o contraditório e a ampla defesa e buscar soluções que preservem liberdade, honra e patrimônio, sempre em conformidade com o ordenamento penal e processual penal.",
+      "O Direito Criminal é o ramo do direito que trata dos crimes e das penalidades aplicáveis a quem comete infrações previstas em lei, visando manter a ordem e a segurança da sociedade.\n\nEntre os principais pontos estão: definição de crimes, aplicação de penas, direito à defesa e garantias fundamentais do acusado.\n\nNa prática, isso significa que uma pessoa pode, por exemplo, se defender de uma acusação criminal, responder a um processo penal ou buscar a revisão de uma pena aplicada.",
   },
   {
     title: "Direito empresarial",
     desc: "Sociedades, contratos comerciais, compliance e suporte jurídico ao negócio.",
     img: practiceBusinessImg,
     detail:
-      "O Direito Empresarial sustenta a governança e o crescimento seguro das empresas. Oferecemos assessoria na constituição e reorganização societária, elaboração e revisão de contratos comerciais, pareceres de risco, acordos com parceiros e fornecedores e orientação em litígios empresariais. Integramos visão jurídica à estratégia do negócio para reduzir passivos, cumprir obrigações regulatórias e proteger sócios e investidores.",
+      "O Direito Empresarial é o ramo do direito que regula as atividades das empresas e dos empresários, desde a abertura até a gestão e encerramento de negócios.\n\nEntre os principais pontos estão: constituição de empresas, elaboração de contratos, obrigações fiscais, recuperação judicial e falência.\n\nNa prática, isso significa que um empresário pode, por exemplo, abrir e regularizar sua empresa, elaborar contratos seguros, resolver conflitos comerciais ou reorganizar o negócio em momentos de dificuldade.",
   },
   {
     title: "Direito Condominial",
     desc: "Assembleias, taxas, conflitos entre moradores e convenção do condomínio.",
     img: practiceRealEstate,
     detail:
-      "O condomínio envolve direitos e deveres coletivos que precisam estar alinhados à Lei e à convenção. Atuamos em interpretação de convenções e regimentos internos, cobrança e contestação de taxas condominiais, assembleias, conflitos entre moradores, obras irregulares e responsabilidade do síndico. Buscamos soluções que preservem a convivência e o patrimônio comum, seja por mediação ou pela defesa do condomínio ou do condômino em juízo.",
+      "O Direito Condominial é o ramo do direito que trata das relações em condomínios, regulando direitos e deveres de moradores, síndicos e administradoras.\n\nEntre os principais pontos estão: cobrança de taxas condominiais, regras de convivência, uso das áreas comuns e gestão do condomínio.\n\nNa prática, isso significa que o condomínio pode cobrar inadimplentes, aplicar regras internas e resolver conflitos entre moradores, enquanto o condômino pode questionar cobranças indevidas ou abusos.",
   },
   {
     title: "Direito Previdenciário",
     desc: "Aposentadorias, benefícios do INSS, revisões e planejamento previdenciário.",
     img: practiceSocial,
     detail:
-      "O Direito Previdenciário assegura o acesso justo aos benefícios da Previdência Social. Acompanhamos requerimentos administrativos no INSS, recursos e ações judiciais para aposentadorias (por idade, tempo de contribuição, especial etc.), auxílio-doença, BPC/LOAS, pensão por morte e revisões de benefícios. Também orientamos no planejamento previdenciário para antecipar requisitos e aumentar a segurança da sua renda futura.",
+      "O Direito Previdenciário é o ramo do direito que regula os benefícios da seguridade social, garantindo proteção ao cidadão em situações como aposentadoria, doença ou incapacidade.\n\nEntre os principais pontos estão: aposentadorias, auxílio-doença, pensão por morte e benefícios assistenciais.\n\nNa prática, isso significa que uma pessoa pode, por exemplo, solicitar aposentadoria, pedir auxílio em caso de incapacidade para o trabalho ou requerer pensão para dependentes.",
   },
 ] as const;
 
 export default function Home() {
+  const { data: reviewsApi, isLoading: reviewsLoading } = useQuery<GoogleReviewsApiResponse>({
+    queryKey: ["/api/google-reviews"],
+    staleTime: 1000 * 60 * 30,
+  });
+
+  const reviewsReady = !reviewsLoading && reviewsApi !== undefined;
+  const apiOk = reviewsReady && reviewsApi.error == null;
+  const apiErrorMessage = reviewsReady && reviewsApi.error ? reviewsApi.error : null;
+
+  const reviewCards = apiOk
+    ? reviewsApi.reviews.map((r, i) => ({
+        key: `g-${i}-${r.authorName}-${r.relativeTime}`,
+        name: r.authorName,
+        time: r.relativeTime,
+        text: r.text?.trim() || "Sem comentário textual.",
+        photoSrc: r.profilePhotoUrl,
+        rating: r.rating,
+      }))
+    : [];
+
+  const displayRating = apiOk ? reviewsApi.rating : null;
+  const displayCount = apiOk
+    ? (reviewsApi.userRatingsTotal ?? (reviewsApi.reviews.length > 0 ? reviewsApi.reviews.length : null))
+    : null;
+
+  const headlineLabel =
+    displayRating != null && displayRating >= 4.5
+      ? "EXCELENTE"
+      : displayRating != null
+        ? displayRating.toFixed(1).replace(".", ",")
+        : "Google";
+
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground font-sans">
       
@@ -197,10 +249,9 @@ export default function Home() {
               {/* Floating Badge */}
               <div className="absolute -bottom-6 -left-6 z-20 glass-panel p-4 rounded-lg shadow-xl border-l-2 border-primary max-w-[200px]">
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-xs font-bold tracking-wider text-white/90">ADVOGADO ONLINE</span>
+                  <span className="text-xs font-bold tracking-wider text-white/90">João Victor Rozendo de Oliveira</span>
                 </div>
-                <p className="text-[10px] text-white/60">Disponível para consultoria imediata.</p>
+                <p className="text-[14px] text-white/60">OAB/AM 18.883</p>
               </div>
             </div>
           </motion.div>
@@ -246,60 +297,104 @@ export default function Home() {
       {/* 3. Casos Frequentes */}
       <section id="casos-frequentes" className="py-24 bg-zinc-950 border-y border-white/5">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7 }}
+            className="text-center mb-16"
+          >
             <h2 className="text-sm uppercase tracking-[0.3em] text-primary mb-4">Especialidades</h2>
             <h3 className="text-3xl md:text-4xl font-serif text-white">CASOS FREQUENTES DO ESCRITÓRIO</h3>
             <div className="w-16 h-px bg-primary mx-auto mt-6" />
-          </div>
+          </motion.div>
 
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            autoplay
-            autoplayInterval={4500}
-            className="w-full max-w-5xl mx-auto"
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
           >
-            <CarouselContent className="-ml-4">
-              {[
-                { title: "Indenizações por Voo", img: caseFlight, desc: "Atrasos, cancelamentos e extravio de bagagem." },
-                { title: "Inscrição Indevida", img: caseDoc, desc: "Nome negativado indevidamente no SPC/Serasa." },
-                { title: "Indenizações por Voo", img: caseFlight, desc: "Atrasos, cancelamentos e extravio de bagagem." }, // Duplicated for carousel demo
-                { title: "Inscrição Indevida", img: caseDoc, desc: "Nome negativado indevidamente no SPC/Serasa." },
-              ].map((item, index) => (
-                <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="group relative overflow-hidden rounded-xl aspect-square border border-white/10 bg-black">
-                    <img src={item.img} alt={item.title} className="w-full h-full object-cover opacity-50 group-hover:opacity-40 transition-opacity duration-500 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 flex flex-col justify-end">
-                      <div className="mb-2">
-                        <span className="text-xs font-bold bg-destructive text-white px-2 py-1 rounded">DIREITO DO CONSUMIDOR</span>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              autoplay
+              autoplayInterval={4500}
+              className="w-full max-w-5xl mx-auto"
+            >
+              <CarouselContent className="-ml-4">
+                {[
+                  { title: "Indenizações por Voo", img: caseFlight, desc: "Atrasos, cancelamentos e extravio de bagagem." },
+                  { title: "Inscrição Indevida", img: caseDoc, desc: "Nome negativado indevidamente no SPC/Serasa." },
+                  {
+                    title: "Financiamento de Veículo",
+                    img: financiamentoVeiculoImg,
+                    desc: "Parcelas altas e juros abusivos podem ser revisados. Reduza sua dívida e evite prejuízos.",
+                  },
+                  {
+                    title: "Taxas Abusivas",
+                    img: taxasAbusivasImg,
+                    desc: "Você pode estar pagando valores indevidos em contratos e não sabe. Revise cobranças e recupere o que é seu por direito.",
+                  },
+                  {
+                    title: "Atraso na Entrega de Encomenda",
+                    img: atrasoEntregaImg,
+                    desc: "Seu pedido não chegou no prazo? Você pode exigir solução rápida ou até indenização.",
+                  },
+                ].map((item, index) => (
+                  <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                    <div className="group relative overflow-hidden rounded-xl aspect-square border border-white/10 bg-black">
+                      <img src={item.img} alt={item.title} className="w-full h-full object-cover opacity-50 group-hover:opacity-40 transition-opacity duration-500 group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6 flex flex-col justify-end">
+                        <div className="mb-2">
+                          <span className="text-xs font-bold bg-destructive text-white px-2 py-1 rounded">DIREITO DO CONSUMIDOR</span>
+                        </div>
+                        <h4 className="text-xl font-serif text-white mb-2">{item.title}</h4>
+                        <p className="text-sm text-white/70 mb-6 font-light">{item.desc}</p>
+                        <Button
+                          asChild
+                          variant="outline"
+                          className="w-full border-white/20 text-white hover:bg-white hover:text-black rounded-none"
+                        >
+                          <a href={headerWhatsAppHref} target="_blank" rel="noopener noreferrer">
+                            Mais Informações
+                          </a>
+                        </Button>
                       </div>
-                      <h4 className="text-xl font-serif text-white mb-2">{item.title}</h4>
-                      <p className="text-sm text-white/70 mb-6 font-light">{item.desc}</p>
-                      <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white hover:text-black rounded-none">
-                        Mais Informações
-                      </Button>
                     </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex border-white/20 hover:bg-primary hover:text-primary-foreground hover:border-primary bg-black/50 text-white left-[-3rem]" />
-            <CarouselNext className="hidden md:flex border-white/20 hover:bg-primary hover:text-primary-foreground hover:border-primary bg-black/50 text-white right-[-3rem]" />
-          </Carousel>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex border-white/20 hover:bg-primary hover:text-primary-foreground hover:border-primary bg-black/50 text-white left-[-3rem]" />
+              <CarouselNext className="hidden md:flex border-white/20 hover:bg-primary hover:text-primary-foreground hover:border-primary bg-black/50 text-white right-[-3rem]" />
+            </Carousel>
+          </motion.div>
         </div>
       </section>
 
       {/* 4. Nossa Área de Atuação */}
       <section id="serviços" className="py-24 bg-white text-zinc-950">
         <div className="container mx-auto px-4">
-          <div className="mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7 }}
+            className="mb-16"
+          >
             <h2 className="text-sm uppercase tracking-[0.3em] text-[#B8860B] mb-4 font-bold">Expertise</h2>
             <h3 className="text-3xl md:text-4xl font-serif text-black">NOSSA ÁREA DE ATUAÇÃO</h3>
-          </div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
+          >
             {practiceAreas.map((practice, index) => (
               <Dialog key={`${practice.title}-${index}`}>
                 <DialogTrigger asChild>
@@ -319,21 +414,29 @@ export default function Home() {
                   <DialogHeader>
                     <DialogTitle>{practice.title}</DialogTitle>
                     <DialogDescription asChild>
-                      <p className="text-sm leading-relaxed text-muted-foreground">{practice.detail}</p>
+                      <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                        {practice.detail}
+                      </p>
                     </DialogDescription>
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="text-center">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.05 }}
+            className="text-center"
+          >
             <Button asChild variant="granite" className="h-14 px-10 rounded-none uppercase tracking-widest font-semibold text-sm">
               <a href={headerWhatsAppHref} target="_blank" rel="noopener noreferrer">
                 Peça mais informações
               </a>
             </Button>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -350,7 +453,13 @@ export default function Home() {
         </div>
         <div className="container relative z-10 mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.7 }}
+              className="space-y-8"
+            >
               <h2 className="text-3xl md:text-4xl font-serif text-white">CONHEÇA NOSSO ESCRITÓRIO</h2>
               <div className="w-16 h-px bg-primary" />
               
@@ -380,16 +489,22 @@ export default function Home() {
                   Fale Conosco
                 </a>
               </Button>
-            </div>
+            </motion.div>
 
-            <div className="relative">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="relative"
+            >
               <div className="absolute inset-0 bg-primary/10 transform translate-x-4 translate-y-4 rounded-sm" />
               <img 
                 src={lawyerImg} 
                 alt="Equipe Rozendo Advocacia" 
                 className="relative z-10 w-full h-auto aspect-square object-cover object-top grayscale-[30%] contrast-125"
               />
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -397,17 +512,29 @@ export default function Home() {
       {/* 6. Prova Social */}
       <section id="avaliações" className="py-24 bg-[#FAF8F5] text-zinc-950 border-t border-zinc-200">
         <div className="container mx-auto px-4">
-          <div className="mb-10">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7 }}
+            className="mb-10"
+          >
             <h2 className="text-2xl md:text-3xl font-serif text-zinc-900 text-left">
               O que nossos clientes estão falando
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.05 }}
+            className="mb-16"
+          >
             <div className="mx-auto max-w-4xl rounded-3xl bg-[#050814] border border-black/70 shadow-[0_18px_60px_rgba(0,0,0,0.7)] px-6 py-6 md:px-10 md:py-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
               <div className="flex-1">
                 <p className="text-3xl md:text-4xl font-serif text-primary font-semibold leading-none">
-                  +2 <span className="text-lg md:text-xl align-top">MIL</span>
+                  +5 <span className="text-lg md:text-xl align-top">MIL</span>
                 </p>
                 <p className="mt-2 text-xs md:text-sm text-white/70 uppercase tracking-[0.25em]">
                   Clientes atendidos
@@ -429,76 +556,190 @@ export default function Home() {
 
               <div className="flex-1">
                 <p className="text-3xl md:text-4xl font-serif text-primary font-semibold leading-none">
-                  +1 <span className="text-lg md:text-xl align-top">MIL</span>
+                  +3 <span className="text-lg md:text-xl align-top">MIL</span>
                 </p>
                 <p className="mt-2 text-xs md:text-sm text-white/70 uppercase tracking-[0.25em]">
                   Casos defendidos
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-16">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, delay: 0.05 }}
+            className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-16"
+          >
             <div className="text-center md:text-left bg-white p-6 rounded-xl shadow-sm border border-zinc-100 flex-shrink-0">
-              <h4 className="font-bold text-xl mb-2">EXCELENTE</h4>
-              <div className="flex gap-1 justify-center md:justify-start text-[#FBBC04] mb-2">
-                {[1,2,3,4,5].map(i => <Star key={i} className="w-5 h-5 fill-current" />)}
-              </div>
-              <p className="text-sm text-zinc-600">Com base em <strong>2 avaliações</strong></p>
-              <div className="mt-4 flex items-center justify-center md:justify-start gap-2">
-                <span className="font-bold text-xl text-blue-500">G</span>
-                <span className="font-bold text-xl text-red-500">o</span>
-                <span className="font-bold text-xl text-yellow-500">o</span>
-                <span className="font-bold text-xl text-blue-500">g</span>
-                <span className="font-bold text-xl text-green-500">l</span>
-                <span className="font-bold text-xl text-red-500">e</span>
-              </div>
+              {reviewsLoading ? (
+                <div className="space-y-3">
+                  <Skeleton className="mx-auto md:mx-0 h-7 w-40" />
+                  <Skeleton className="mx-auto md:mx-0 h-5 w-32" />
+                  <Skeleton className="mx-auto md:mx-0 h-4 w-48" />
+                </div>
+              ) : apiErrorMessage ? (
+                <>
+                  <h4 className="font-bold text-xl mb-2 text-zinc-800">Avaliações Google</h4>
+                  <p className="text-sm text-zinc-600 leading-relaxed">
+                    Não foi possível carregar os dados de <code className="rounded bg-zinc-100 px-1 text-xs">/api/google-reviews</code>{" "}
+                    agora. Confira as avaliações direto no Google.
+                  </p>
+                  <a
+                    href={googleMapsPlaceReviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block text-xs font-medium text-blue-600 underline-offset-4 hover:underline"
+                  >
+                    Abrir perfil no Google Maps
+                  </a>
+                </>
+              ) : (
+                <>
+                  <h4 className="font-bold text-xl mb-2">{headlineLabel}</h4>
+                  <div className="flex gap-1 justify-center md:justify-start text-[#FBBC04] mb-2">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star
+                        key={i}
+                        className={`h-5 w-5 ${
+                          displayRating != null && i <= Math.round(displayRating)
+                            ? "fill-[#FBBC04] text-[#FBBC04]"
+                            : "text-zinc-200"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm text-zinc-600">
+                    {displayCount != null ? (
+                      <>
+                        Com base em{" "}
+                        <strong>
+                          {displayCount} {displayCount === 1 ? "avaliação" : "avaliações"}
+                        </strong>{" "}
+                        no Google
+                      </>
+                    ) : (
+                      <span className="text-zinc-500">Nota e total conforme o Google Maps</span>
+                    )}
+                  </p>
+                  <a
+                    href={googleMapsPlaceReviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block text-xs font-medium text-blue-600 underline-offset-4 hover:underline"
+                  >
+                    Ver perfil e avaliações no Google
+                  </a>
+                  <div className="mt-4 flex items-center justify-center md:justify-start gap-2">
+                    <span className="font-bold text-xl text-blue-500">G</span>
+                    <span className="font-bold text-xl text-red-500">o</span>
+                    <span className="font-bold text-xl text-yellow-500">o</span>
+                    <span className="font-bold text-xl text-blue-500">g</span>
+                    <span className="font-bold text-xl text-green-500">l</span>
+                    <span className="font-bold text-xl text-red-500">e</span>
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 w-full">
-              {[
-                { name: "Amanda Silva", time: "2 meses atrás", text: "Profissionais excelentes, super indico. Resolveram meu problema com agilidade.", avatar: avatar1 },
-                { name: "Carlos Oliveira", time: "5 meses atrás", text: "Profissionais qualificados em consultoria extracontratual, muito atenciosos.", avatar: avatar2 }
-              ].map((review, i) => (
-                <Card key={i} className="bg-white border-zinc-100 shadow-sm rounded-xl">
-                  <CardContent className="p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                      <img src={review.avatar} alt={review.name} className="w-12 h-12 rounded-full object-cover bg-zinc-200" />
-                      <div>
-                        <h5 className="font-bold text-sm">{review.name}</h5>
-                        <p className="text-xs text-zinc-500">{review.time}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-1 text-[#FBBC04] mb-3">
-                      {[1,2,3,4,5].map(i => <Star key={i} className="w-4 h-4 fill-current" />)}
-                    </div>
-                    <p className="text-zinc-700 text-sm font-light">"{review.text}"</p>
-                  </CardContent>
-                </Card>
-              ))}
+              {reviewsLoading
+                ? [0, 1, 2, 3].map((i) => (
+                    <Card key={`sk-${i}`} className="bg-white border-zinc-100 shadow-sm rounded-xl">
+                      <CardContent className="space-y-4 p-6">
+                        <div className="flex items-center gap-4">
+                          <Skeleton className="h-12 w-12 rounded-full" />
+                          <div className="flex-1 space-y-2">
+                            <Skeleton className="h-4 w-32" />
+                            <Skeleton className="h-3 w-24" />
+                          </div>
+                        </div>
+                        <Skeleton className="h-4 w-28" />
+                        <Skeleton className="h-16 w-full" />
+                      </CardContent>
+                    </Card>
+                  ))
+                : apiErrorMessage
+                  ? null
+                  : reviewCards.length > 0
+                    ? reviewCards.map((review) => (
+                        <Card key={review.key} className="bg-white border-zinc-100 shadow-sm rounded-xl">
+                          <CardContent className="p-6">
+                            <div className="flex items-center gap-4 mb-4">
+                              {review.photoSrc ? (
+                                <img
+                                  src={review.photoSrc}
+                                  alt=""
+                                  referrerPolicy="no-referrer"
+                                  className="h-12 w-12 rounded-full object-cover bg-zinc-200"
+                                />
+                              ) : (
+                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-zinc-200 text-sm font-semibold text-zinc-600">
+                                  {review.name.slice(0, 1).toUpperCase()}
+                                </div>
+                              )}
+                              <div>
+                                <h5 className="font-bold text-sm">{review.name}</h5>
+                                <p className="text-xs text-zinc-500">{review.time}</p>
+                              </div>
+                            </div>
+                            <div className="mb-3 flex gap-1 text-[#FBBC04]">
+                              {[1, 2, 3, 4, 5].map((i) => (
+                                <Star
+                                  key={i}
+                                  className={`h-4 w-4 ${
+                                    i <= Math.round(review.rating)
+                                      ? "fill-[#FBBC04] text-[#FBBC04]"
+                                      : "text-zinc-200"
+                                  }`}
+                                />
+                              ))}
+                            </div>
+                            <p className="text-sm font-light text-zinc-700">&ldquo;{review.text}&rdquo;</p>
+                            <p className="mt-3 text-[10px] uppercase tracking-wider text-zinc-400">
+                              Avaliação no Google (via API)
+                            </p>
+                          </CardContent>
+                        </Card>
+                      ))
+                    : (
+                        <div className="col-span-full rounded-xl border border-dashed border-zinc-200 bg-white/80 px-6 py-10 text-center text-sm text-zinc-600">
+                          <p className="mb-2">
+                            Nenhum texto de avaliação foi retornado em <code className="rounded bg-zinc-100 px-1 text-xs">/api/google-reviews</code>{" "}
+                            (a API do Google costuma enviar até cinco resenhas por requisição).
+                          </p>
+                          <a
+                            href={googleMapsPlaceReviewsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-medium text-blue-600 underline-offset-4 hover:underline"
+                          >
+                            Ver todas no Google Maps
+                          </a>
+                        </div>
+                      )}
             </div>
-          </div>
+          </motion.div>
           
-          <div className="flex justify-end">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.05 }}
+            className="flex justify-end"
+          >
              <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-xs font-medium border border-green-200">
                <ShieldCheck className="w-4 h-4" />
                Verificações Realizadas
              </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* 7. Rodapé */}
       <footer className="relative overflow-hidden border-t border-white/5 py-16 text-white/70">
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <img
-              src={logoHeader}
-              alt=""
-              aria-hidden
-              className="h-auto max-h-[min(56vh,28rem)] w-auto max-w-[min(92vw,36rem)] object-contain object-center opacity-100 sm:max-w-[40rem] sm:max-h-[30rem] lg:max-w-[44rem] lg:max-h-[32rem]"
-            />
-          </div>
           <div className="absolute inset-0 bg-[#050505]/55" />
         </div>
         <div className="container relative z-10 mx-auto px-4">
