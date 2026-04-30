@@ -1,10 +1,13 @@
-const PLACES_FIND_URL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json";
-const PLACES_DETAILS_URL = "https://maps.googleapis.com/maps/api/place/details/json";
+// Places API (New) – https://developers.google.com/maps/documentation/places/web-service
+// Replaces the legacy findplacefromtext + place/details endpoints.
+
+const PLACES_TEXT_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
+const PLACES_DETAILS_URL_PREFIX = "https://places.googleapis.com/v1/places"; // + /{placeId}
 
 const DEFAULT_FIND_INPUT =
   "Rozendo Advogados & Associados, Av. André Araújo, 97, Adrianópolis, Manaus AM";
-const DEFAULT_LAT = "-3.1072668";
-const DEFAULT_LNG = "-60.009624";
+const DEFAULT_LAT = -3.1072668;
+const DEFAULT_LNG = -60.009624;
 
 export type PublicGoogleReview = {
   authorName: string;
@@ -21,96 +24,152 @@ export type GoogleReviewsPayload = {
   reviews: PublicGoogleReview[];
 };
 
-type FindPlaceResponse = {
-  status: string;
-  candidates?: { place_id?: string }[];
-  error_message?: string;
+// ── New API response shapes ────────────────────────────────────────────────────
+
+type TextSearchResponse = {
+  places?: {
+    id?: string; // place ID in the new API
+    displayName?: { text?: string; languageCode?: string };
+  }[];
+  error?: { message?: string };
+};
+
+type AuthorAttribution = {
+  displayName?: string;
+  photoUri?: string;
+};
+
+type ReviewNew = {
+  name?: string;
+  relativePublishTimeDescription?: string;
+  rating?: number;
+  text?: { text?: string; languageCode?: string };
+  authorAttribution?: AuthorAttribution;
 };
 
 type PlaceDetailsResponse = {
-  status: string;
-  result?: {
-    name?: string;
-    rating?: number;
-    user_ratings_total?: number;
-    reviews?: {
-      author_name?: string;
-      rating?: number;
-      relative_time_description?: string;
-      text?: string;
-      profile_photo_url?: string;
-    }[];
-  };
-  error_message?: string;
+  id?: string;
+  displayName?: { text?: string; languageCode?: string };
+  rating?: number;
+  userRatingCount?: number;
+  reviews?: ReviewNew[];
+  error?: { message?: string };
 };
 
-async function fetchJson<T>(url: string): Promise<T> {
-  const res = await fetch(url);
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+async function postJson<T>(url: string, body: object, apiKey: string, fieldMask: string): Promise<T> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": fieldMask,
+    },
+    body: JSON.stringify(body),
+  });
   if (!res.ok) {
-    throw new Error(`Google Places HTTP ${res.status}`);
+    throw new Error(`Google Places HTTP ${res.status}: ${await res.text()}`);
   }
   return (await res.json()) as T;
 }
 
+async function getJson<T>(url: string, apiKey: string, fieldMask: string): Promise<T> {
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": fieldMask,
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Google Places HTTP ${res.status}: ${await res.text()}`);
+  }
+  return (await res.json()) as T;
+}
+
+// ── Core functions ────────────────────────────────────────────────────────────
+
+/**
+ * Resolves a place ID using Text Search (New).
+ * Falls back to the GOOGLE_PLACE_ID env variable if set (cheapest option –
+ * avoids a Text Search call on every request).
+ */
 export async function resolvePlaceId(apiKey: string): Promise<string> {
   const fromEnv = process.env.GOOGLE_PLACE_ID?.trim();
   if (fromEnv) return fromEnv;
 
-  const input = (process.env.GOOGLE_PLACE_FIND_INPUT || DEFAULT_FIND_INPUT).trim();
-  const lat = process.env.GOOGLE_PLACE_BIAS_LAT || DEFAULT_LAT;
-  const lng = process.env.GOOGLE_PLACE_BIAS_LNG || DEFAULT_LNG;
-  const radius = process.env.GOOGLE_PLACE_BIAS_RADIUS_M || "8000";
+  const textQuery = (process.env.GOOGLE_PLACE_FIND_INPUT || DEFAULT_FIND_INPUT).trim();
+  const lat = parseFloat(process.env.GOOGLE_PLACE_BIAS_LAT || String(DEFAULT_LAT));
+  const lng = parseFloat(process.env.GOOGLE_PLACE_BIAS_LNG || String(DEFAULT_LNG));
+  const radius = parseInt(process.env.GOOGLE_PLACE_BIAS_RADIUS_M || "8000", 10);
 
-  const params = new URLSearchParams({
-    input,
-    inputtype: "textquery",
-    fields: "place_id",
-    locationbias: `circle:${radius}@${lat},${lng}`,
-    key: apiKey,
-  });
+  const body = {
+    textQuery,
+    locationBias: {
+      circle: {
+        center: { latitude: lat, longitude: lng },
+        radius,
+      },
+    },
+    pageSize: 1,
+    languageCode: "pt-BR",
+  };
 
-  const data = await fetchJson<FindPlaceResponse>(`${PLACES_FIND_URL}?${params.toString()}`);
+  const data = await postJson<TextSearchResponse>(
+    PLACES_TEXT_SEARCH_URL,
+    body,
+    apiKey,
+    "places.id", // only need the place ID here
+  );
 
-  if (data.status !== "OK" || !data.candidates?.[0]?.place_id) {
-    const msg = data.error_message || data.status || "FIND_FAILED";
-    throw new Error(`Find Place: ${msg}`);
+  if (data.error) {
+    throw new Error(`Text Search: ${data.error.message || "FIND_FAILED"}`);
   }
 
-  return data.candidates[0].place_id;
+  const placeId = data.places?.[0]?.id;
+  if (!placeId) {
+    throw new Error("Text Search: no candidates returned (FIND_FAILED)");
+  }
+
+  return placeId;
 }
 
+/**
+ * Fetches place details (name, rating, reviews) using Place Details (New).
+ */
 export async function fetchPlaceReviews(apiKey: string): Promise<GoogleReviewsPayload> {
   const placeId = await resolvePlaceId(apiKey);
 
-  const fields = ["name", "rating", "user_ratings_total", "reviews"].join(",");
-  const params = new URLSearchParams({
-    place_id: placeId,
-    fields,
-    reviews_sort: "newest",
-    language: "pt-BR",
-    key: apiKey,
-  });
+  // Field mask for Place Details (New)
+  const fieldMask = [
+    "id",
+    "displayName",
+    "rating",
+    "userRatingCount",
+    "reviews",
+  ].join(",");
 
-  const data = await fetchJson<PlaceDetailsResponse>(`${PLACES_DETAILS_URL}?${params.toString()}`);
+  const url = `${PLACES_DETAILS_URL_PREFIX}/${placeId}?languageCode=pt-BR`;
 
-  if (data.status !== "OK" || !data.result) {
-    const msg = data.error_message || data.status || "DETAILS_FAILED";
-    throw new Error(`Place Details: ${msg}`);
+  const data = await getJson<PlaceDetailsResponse>(url, apiKey, fieldMask);
+
+  if (data.error) {
+    throw new Error(`Place Details: ${data.error.message || "DETAILS_FAILED"}`);
   }
 
-  const r = data.result;
-  const reviews: PublicGoogleReview[] = (r.reviews ?? []).map((rev) => ({
-    authorName: rev.author_name ?? "Usuário Google",
+  const reviews: PublicGoogleReview[] = (data.reviews ?? []).map((rev) => ({
+    authorName: rev.authorAttribution?.displayName ?? "Usuário Google",
     rating: typeof rev.rating === "number" ? rev.rating : 0,
-    relativeTime: rev.relative_time_description ?? "",
-    text: rev.text?.trim() ?? "",
-    profilePhotoUrl: rev.profile_photo_url ?? null,
+    relativeTime: rev.relativePublishTimeDescription ?? "",
+    text: rev.text?.text?.trim() ?? "",
+    profilePhotoUrl: rev.authorAttribution?.photoUri ?? null,
   }));
 
   return {
-    placeName: r.name ?? null,
-    rating: typeof r.rating === "number" ? r.rating : null,
-    userRatingsTotal: typeof r.user_ratings_total === "number" ? r.user_ratings_total : null,
+    placeName: data.displayName?.text ?? null,
+    rating: typeof data.rating === "number" ? data.rating : null,
+    userRatingsTotal: typeof data.userRatingCount === "number" ? data.userRatingCount : null,
     reviews,
   };
 }
