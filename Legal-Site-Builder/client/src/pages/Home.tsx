@@ -154,10 +154,10 @@ export default function Home() {
       
       {/* 1. Header */}
       <header className="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/5">
-        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+        <div className="container mx-auto px-4 h-20 flex items-center gap-2">
           <a
             href="/"
-            className="flex min-h-0 min-w-0 max-w-[min(100%,calc(100vw-9rem))] shrink-0 items-center justify-start self-stretch overflow-hidden rounded-md outline-none ring-primary/60 focus-visible:ring-2 sm:max-w-[min(100%,calc(100vw-11rem))] md:max-w-[min(100%,calc(100vw-36rem))] lg:max-w-[min(100%,calc(100vw-40rem))]"
+            className="flex min-h-0 min-w-0 flex-1 items-center justify-start self-stretch overflow-hidden rounded-md outline-none ring-primary/60 focus-visible:ring-2"
             aria-label="Rozendo Advogados & Associados — início"
             onClick={(e) => {
               if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -172,7 +172,7 @@ export default function Home() {
             />
           </a>
           
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-8 ml-auto">
             {["Casos Frequentes", "Serviços", "Sobre", "Avaliações"].map((item) => (
               <a 
                 key={item} 
@@ -184,7 +184,7 @@ export default function Home() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="shrink-0 flex items-center gap-1 sm:gap-2 ml-auto md:ml-3">
             <a
               href={headerWhatsAppHref}
               target="_blank"
