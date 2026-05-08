@@ -16,12 +16,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 // Image imports
 import heroBg from "@/assets/images/bg-advogado.png";
-import lawyerImg from "@/assets/images/Rozendo.jpeg";
+import lawyerImg from "@/assets/images/rozendo-hero.jpg";
 import caseFlight from "@/assets/images/case-flight.jpg";
 import caseDoc from "@/assets/images/case-document.jpg";
 import financiamentoVeiculoImg from "@/assets/images/finaciamento-de-veiculo.jpg";
 import taxasAbusivasImg from "@/assets/images/taxas-abusivas.jpg";
 import atrasoEntregaImg from "@/assets/images/atraso-na-entrega.jpg";
+import cobrancaIndevidaImg from "@/assets/images/cobrança-indevida.png";
 import practiceCivil from "@/assets/images/practice-civil.jpg";
 import practiceFamily from "@/assets/images/practice-family.jpg";
 import practiceLabor from "@/assets/images/practice-labor.jpg";
@@ -30,6 +31,7 @@ import practiceSocial from "@/assets/images/practice-social.jpg";
 import logoMarcaDagua from "@/assets/images/Logo-marca-d-agua.png";
 import logoHeader from "@/assets/images/logo-header.png";
 import fundoLivros from "@/assets/images/fundo-livros.png";
+import sobreNosImg from "@/assets/images/rozendo-sobre-nos.jpg";
 
 const practiceCriminalImg =
   "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=1200";
@@ -227,10 +229,12 @@ export default function Home() {
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden min-h-[90vh] flex items-center">
         {/* Background Image with Dark Overlay */}
         <div className="absolute inset-0 z-0">
-          <img 
-            src={heroBg} 
-            alt="Fundo jurídico" 
-            className="w-full h-full object-cover object-center opacity-50 blur-[0.5px] grayscale-[20%] contrast-110 brightness-85"
+          <img
+            src={heroBg}
+            alt="Fundo jurídico"
+            loading="eager"
+            decoding="async"
+            className="w-full h-full object-cover object-[center_30%] opacity-70 brightness-75"
           />
           <div className="absolute inset-0 bg-black/30" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/50" />
@@ -245,13 +249,17 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="relative order-2 md:order-1"
           >
-            <div className="relative mx-auto max-w-[400px]">
+            <div className="relative mx-auto max-w-[400px] group">
               <div className="absolute -inset-4 bg-primary/20 blur-3xl rounded-full" />
-              <img 
-                src={lawyerImg} 
-                alt="Advogado Principal" 
-                className="relative z-10 w-full object-cover aspect-[4/5] rounded-tl-[80px] rounded-br-[80px] border border-white/10 shadow-2xl grayscale-[20%] contrast-125 brightness-90"
-              />
+              <div className="relative z-10 overflow-hidden rounded-tl-[80px] rounded-br-[80px] border border-white/10 shadow-2xl aspect-[4/5]">
+                <img
+                  src={lawyerImg}
+                  alt="Advogado Principal"
+                  loading="eager"
+                  decoding="async"
+                  className="w-full h-full object-cover object-[center_10%] group-hover:scale-105 transition-transform duration-700"
+                />
+              </div>
               
               {/* Floating Badge */}
               <div className="absolute -bottom-6 -left-6 z-20 glass-panel p-4 rounded-lg shadow-xl border-l-2 border-primary max-w-[200px]">
@@ -349,6 +357,11 @@ export default function Home() {
                     title: "Atraso na Entrega de Encomenda",
                     img: atrasoEntregaImg,
                     desc: "Seu pedido não chegou no prazo? Você pode exigir solução rápida ou até indenização.",
+                  },
+                  {
+                    title: "Cobranças Indevidas",
+                    img: cobrancaIndevidaImg,
+                    desc: "Tarifas e juros abusivos podem ser contestados. Revise seu contrato bancário e recupere valores pagos a mais.",
                   },
                 ].map((item, index) => (
                   <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
@@ -506,10 +519,12 @@ export default function Home() {
               className="relative"
             >
               <div className="absolute inset-0 bg-primary/10 transform translate-x-4 translate-y-4 rounded-sm" />
-              <img 
-                src={lawyerImg} 
-                alt="Equipe Rozendo Advocacia" 
-                className="relative z-10 w-full h-auto aspect-square object-cover object-top grayscale-[30%] contrast-125"
+              <img
+                src={sobreNosImg}
+                alt="Equipe Rozendo Advocacia"
+                loading="lazy"
+                decoding="async"
+                className="relative z-10 w-full h-auto aspect-[3/4] object-cover object-[center_15%] shadow-xl"
               />
             </motion.div>
           </div>
