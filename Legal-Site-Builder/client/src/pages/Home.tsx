@@ -32,6 +32,7 @@ import logoMarcaDagua from "@/assets/images/Logo-marca-d-agua.png";
 import logoHeader from "@/assets/images/logo-header.png";
 import fundoLivros from "@/assets/images/fundo-livros.png";
 import sobreNosImg from "@/assets/images/rozendo-sobre-nos.jpg";
+import forumBusinessImg from "@/assets/images/forum-business.png";
 
 const practiceCriminalImg =
   "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=1200";
@@ -804,15 +805,31 @@ export default function Home() {
               </ul>
             </div>
 
-            <div className="relative h-[200px] w-full max-w-[240px] justify-self-center self-center overflow-hidden rounded-xl border border-white/10 bg-white/5 p-2 md:col-span-2 md:h-[220px] md:max-w-[280px] lg:col-span-1 lg:h-[250px] lg:max-w-[280px]">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.9525611711492!2d-60.00974619999999!3d-3.1072515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x926c052db993bf1f%3A0x19fb39ba9fe7a612!2sF%C3%B3rum%20Business%20Center%20Manaus!5e0!3m2!1sen!2sbr!4v1775772195850!5m2!1sen!2sbr"
-                title="Fórum Business Center Manaus — localização do escritório"
-                className="absolute inset-0 h-full w-full rounded-lg border-0"
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+            <div className="flex gap-3 justify-center self-center md:col-span-2 lg:col-span-1">
+              <div className="relative flex-1 h-[200px] md:h-[220px] lg:h-[250px] overflow-hidden rounded-xl border border-white/10 bg-white/5 p-2">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.9525611711492!2d-60.00974619999999!3d-3.1072515!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x926c052db993bf1f%3A0x19fb39ba9fe7a612!2sF%C3%B3rum%20Business%20Center%20Manaus!5e0!3m2!1sen!2sbr!4v1775772195850!5m2!1sen!2sbr"
+                  title="Fórum Business Center Manaus — localização do escritório"
+                  className="absolute inset-0 h-full w-full rounded-lg border-0"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+              <a
+                href="https://www.google.com/maps/place/F%C3%B3rum+Business+Center+Manaus/@-3.1072515,-60.009746,17z"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ver localização no Google Maps"
+                className="relative flex-1 h-[200px] md:h-[220px] lg:h-[250px] overflow-hidden rounded-xl border border-white/10 bg-white/5 p-2 block"
+              >
+                <img
+                  src={forumBusinessImg}
+                  alt="Fórum Business Center Manaus"
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full rounded-lg object-cover"
+                />
+              </a>
             </div>
           </div>
 
