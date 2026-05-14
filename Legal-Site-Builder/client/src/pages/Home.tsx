@@ -41,7 +41,7 @@ const practiceBusinessImg =
 
 const headerWhatsAppHref = "http://wa.me/5592984022008";
 const headerInstagramHref = "https://www.instagram.com/rozendoadvogadoseassociados?igsh=MWtreTQ5ZGY4M25jZw==";
-const headerMailto = "mailto:joaorozendo.adv@gmail.com";
+const headerMailto = "mailto:rozendoadvogadoeassociados@gmail.com";
 
 const googleMapsPlaceReviewsUrl =
   "https://www.google.com/maps/place/Rozendo+Advogados+%26+Associados/@-3.1072668,-60.009624,17z/data=!3m1!4b1!4m6!3m5!1s0x926c05cf6c8c3389:0xdfeed824546a005!8m2!3d-3.1072668!4d-60.009624!16s%2Fg%2F11xccft_qs?hl=pt_BR";
@@ -666,10 +666,11 @@ export default function Home() {
               )}
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 w-full">
-              {reviewsLoading
-                ? [0, 1, 2, 3].map((i) => (
-                    <Card key={`sk-${i}`} className="bg-white border-zinc-100 shadow-sm rounded-xl">
+            <div className="w-full">
+              {reviewsLoading ? (
+                <div className="flex gap-6 overflow-hidden">
+                  {[0, 1, 2].map((i) => (
+                    <Card key={`sk-${i}`} className="bg-white border-zinc-100 shadow-sm rounded-xl min-w-[300px] flex-1">
                       <CardContent className="space-y-4 p-6">
                         <div className="flex items-center gap-4">
                           <Skeleton className="h-12 w-12 rounded-full" />
@@ -682,13 +683,15 @@ export default function Home() {
                         <Skeleton className="h-16 w-full" />
                       </CardContent>
                     </Card>
-                  ))
-                : apiErrorMessage
-                  ? null
-                  : reviewCards.length > 0
-                    ? reviewCards.map((review) => (
-                        <Card key={review.key} className="bg-white border-zinc-100 shadow-sm rounded-xl">
-                          <CardContent className="p-6">
+                  ))}
+                </div>
+              ) : apiErrorMessage ? null : reviewCards.length > 0 ? (
+                <Carousel opts={{ align: "start", loop: true }} autoplay autoplayInterval={5000} className="w-full">
+                  <CarouselContent className="-ml-4">
+                    {reviewCards.map((review) => (
+                      <CarouselItem key={review.key} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                        <Card className="bg-white border-zinc-100 shadow-sm rounded-xl h-full">
+                          <CardContent className="p-6 flex flex-col h-full">
                             <div className="flex items-center gap-4 mb-4">
                               {review.photoSrc ? (
                                 <img
@@ -703,7 +706,7 @@ export default function Home() {
                                 </div>
                               )}
                               <div>
-                                <h5 className="font-bold text-sm">{review.name}</h5>
+                                <h5 className="font-bold text-sm text-zinc-800">{review.name}</h5>
                                 <p className="text-xs text-zinc-500">{review.time}</p>
                               </div>
                             </div>
@@ -711,37 +714,37 @@ export default function Home() {
                               {[1, 2, 3, 4, 5].map((i) => (
                                 <Star
                                   key={i}
-                                  className={`h-4 w-4 ${
-                                    i <= Math.round(review.rating)
-                                      ? "fill-[#FBBC04] text-[#FBBC04]"
-                                      : "text-zinc-200"
-                                  }`}
+                                  className={`h-4 w-4 ${i <= Math.round(review.rating) ? "fill-[#FBBC04] text-[#FBBC04]" : "text-zinc-200"}`}
                                 />
                               ))}
                             </div>
-                            <p className="text-sm font-light text-zinc-700">&ldquo;{review.text}&rdquo;</p>
+                            <p className="text-sm font-light text-zinc-700 flex-1">&ldquo;{review.text}&rdquo;</p>
                             <p className="mt-3 text-[10px] uppercase tracking-wider text-zinc-400">
                               Avaliação no Google (via API)
                             </p>
                           </CardContent>
                         </Card>
-                      ))
-                    : (
-                        <div className="col-span-full rounded-xl border border-dashed border-zinc-200 bg-white/80 px-6 py-10 text-center text-sm text-zinc-600">
-                          <p className="mb-2">
-                            Nenhum texto de avaliação foi retornado em <code className="rounded bg-zinc-100 px-1 text-xs">/api/google-reviews</code>{" "}
-                            (a API do Google costuma enviar até cinco resenhas por requisição).
-                          </p>
-                          <a
-                            href={googleMapsPlaceReviewsUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs font-medium text-blue-600 underline-offset-4 hover:underline"
-                          >
-                            Ver todas no Google Maps
-                          </a>
-                        </div>
-                      )}
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="hidden md:flex -left-5 border-zinc-200 hover:bg-primary hover:text-white hover:border-primary" />
+                  <CarouselNext className="hidden md:flex -right-5 border-zinc-200 hover:bg-primary hover:text-white hover:border-primary" />
+                </Carousel>
+              ) : (
+                <div className="rounded-xl border border-dashed border-zinc-200 bg-white/80 px-6 py-10 text-center text-sm text-zinc-600">
+                  <p className="mb-2">
+                    Nenhum texto de avaliação foi retornado em <code className="rounded bg-zinc-100 px-1 text-xs">/api/google-reviews</code>.
+                  </p>
+                  <a
+                    href={googleMapsPlaceReviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-medium text-blue-600 underline-offset-4 hover:underline"
+                  >
+                    Ver todas no Google Maps
+                  </a>
+                </div>
+              )}
             </div>
           </motion.div>
           
@@ -794,7 +797,7 @@ export default function Home() {
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5">
                     <Mail className="w-4 h-4" />
                   </div>
-                  <span>joaorozendo.adv@gmail.com</span>
+                  <span>rozendoadvogadoeassociados@gmail.com</span>
                 </li>
                 <li className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-primary border border-white/5">
